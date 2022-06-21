@@ -1,0 +1,14 @@
+
+--prerequisitos
+
+	sudo apt install build-essential
+	sudo apt install libfontconfig1
+	sudo apt install mesa-common-dev
+	
+
+	sudo apt install qt5-dev-*
+	sudo apt install qt6-*
+
+-- correr el .run de los "qt offline instaler"
+	
+	
