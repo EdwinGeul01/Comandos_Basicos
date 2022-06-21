@@ -1,0 +1,33 @@
+
+--Instalacion de Apache2
+	sudo apt install apache2
+
+--iniciar servicio de apache2
+	sudo service apache2 start
+	sudo service apache2 status
+
+--iniciar ufw ( Uncomplicated Firewall) 
+	sudo ufw enable
+	sudo ufw status -- verificar activacion
+
+--Instalacion mysql-server
+	sudo apt install mysql-server
+	
+
+--Configuracion usuario nuevo 
+	sudo mysql -u root -p
+	ENTER
+	use mysql;
+	create user 'user_name'@'localhost' identified by 'pass';
+	grant all privileges on *.* ro 'user_name'@'localhost';
+	flush privileges;
+	exit;
+
+
+--Instalacion de PHP
+	sudo apt install php libapache2-mod-php php-mysql
+
+--Instalacion PHPmyadmin
+	sudo apt install phpmyadmin 
+
+
