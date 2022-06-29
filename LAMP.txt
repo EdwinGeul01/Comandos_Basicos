@@ -19,7 +19,7 @@
 	ENTER
 	use mysql;
 	create user 'user_name'@'localhost' identified by 'pass';
-	grant all privileges on *.* ro 'user_name'@'localhost';
+	grant all privileges on *.* to 'user_name'@'localhost';
 	flush privileges;
 	exit;
 
