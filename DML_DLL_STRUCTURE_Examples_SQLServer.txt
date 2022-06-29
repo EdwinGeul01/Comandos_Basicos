@@ -1,0 +1,140 @@
+
+    Ejemplos sintaxis SQL Server 
+        Edwin Geul
+
+-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+
+#Crear BD
+    CREATE DATABASE <d_name>
+
+#Borrar BD
+    DROP DATABASE d_name;
+
+#Crear tabla 
+    CREATE TABLE t_name(
+	id INT PRIMARY KEY IDENTITY(1,1),
+	nombre VARCHAR(250)
+    )
+
+#Borrar Tabla
+    DROP TABLE t_name;
+
+#Insertar en la tabla 
+    INSERT INTO t_name ( nombre)
+    VALUES ('asd');
+
+#Modificar estructura de una tabla
+    ALTER TABLE t_name
+    ADD tipo char;
+
+#Ver contenido
+    SELECT * FROM t_name;
+
+#Borrar contenido
+    DELETE FROM t_name;
+
+#Modificar contenido de una fila
+    UPDATE t_name
+    SET  nombre = 'hola'
+    WHERE id = 1;
+
+
+
+-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+
+
+# Agregar una llave foranea
+    ALTER TABLE t_name
+    ADD FOREIGN KEY (tipo)
+    REFERENCES tipos(id);
+
+# Borrar llave foranea
+    ALTER TABLE t_name
+    DROP CONSTRAINT [FK__t_name__tipo__1B29035F];
+    
+# inner join ( solo cambiar inner por left y right en los otros casos )
+    SELECT tn.id, tn.nombre, tn.tipo , T.id , t.n
+    FROM t_name tn
+    INNER JOIN tipos t
+    ON tn.tipo = T.id;
+
+-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+
+# Crear una vista
+    CREATE VIEW temporal_view
+    AS
+    SELECT tn.nombre, tn.tipo 
+    FROM t_name tn
+
+
+#Borrar una vista
+    DROP VIEW temporal_view;
+
+
+# Crear procedimiento almacenado
+    CREATE PROCEDURE proceso_temp
+    @dato_ingresar AS VARCHAR(250),
+    @tipo AS char
+    AS
+    BEGIN        
+        INSERT INTO t_name VALUES(@dato_ingresar,@tipo);
+    END
+
+
+#Ejecutar procedimiento almacenado
+    EXEC proceso_temp 'asqqwe','GG';
+
+
+#Borrar procedimiento
+    DROP PROCEDURE proceso_temp
+
+
+# Crear Funcion 
+    CREATE FUNCTION Temporal_Func()
+    RETURNS int
+    AS
+    BEGIN
+        DECLARE @temp INT;
+            SELECT @temp = COUNT(*)
+            FROM t_name;
+        RETURN  @temp;
+    END
+
+#Borrar funcion 
+    DROP FUNCTION Temporal_Func;
+
+#recoger valores de return en un procedimiento almacenado
+    CREATE PROCEDURE temp2
+    AS
+    BEGIN
+        DECLARE @a INT
+        EXEC @a = Temporal_Func;
+        PRINT(@a);
+    END
+
+#Ejecutar Funcion 
+    EXEC dbo.Temporal_Func
+
+-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+
+#Crear una transaccion con beneficio de recuperacion
+    BEGIN TRANSACTION
+    BEGIN TRY     
+        INSERT INTO t_name VALUES('asd','asd');
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION
+        PRINT 'Ha ocurrido un error!'
+    END CATCH
+
+
+
+#borrar tabla si existe
+    DROP TABLE IF EXISTS #t_name;
+
+
+#hacer una copia a una tabla temporal , se borrara cuando el ente cierre la conexion 
+	select * 
+	into #tests
+	from t_name;
